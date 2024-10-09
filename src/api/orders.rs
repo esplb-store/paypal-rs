@@ -6,6 +6,7 @@ use std::borrow::Cow;
 
 use derive_builder::Builder;
 use serde::Serialize;
+use serde_json::{json, Value};
 
 use crate::{
     data::orders::{Order, OrderPayload},
@@ -43,6 +44,50 @@ impl Endpoint for CreateOrder {
 
     fn body(&self) -> Option<Self::Body> {
         Some(self.order.clone())
+    }
+}
+
+///
+#[derive(Debug)]
+pub struct UpdateOrder {
+    /// 
+    pub op: String,
+    /// 
+    pub path: String,
+    /// 
+    pub order: Order,
+}
+
+/// 
+impl UpdateOrder {
+    /// 
+    pub fn new( op: String, path: String, order: Order) -> Self {
+        Self {  op, path, order }
+    }
+}
+
+impl Endpoint for UpdateOrder {
+    type Query = ();
+
+    type Body = Value;
+
+    type Response = ();
+
+    fn relative_path(&self) -> Cow<str> {
+        Cow::Owned(format!("/v2/checkout/orders/{}", &self.order.id))
+    }
+
+    fn method(&self) -> reqwest::Method {
+        reqwest::Method::PATCH
+    }
+
+    fn body(&self) -> Option<Self::Body> {
+        let body = json!({
+            "op": self.op,
+            "path": self.path,
+            "value": self.order.clone(),
+        });
+        Some(body)
     }
 }
 
