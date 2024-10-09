@@ -5,7 +5,7 @@
 use std::borrow::Cow;
 
 use derive_builder::Builder;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 use crate::{
@@ -48,7 +48,7 @@ impl Endpoint for CreateOrder {
 }
 
 ///
-#[derive(Debug)]
+#[derive(Debug,Serialize,Deserialize)]
 pub struct UpdateOrder {
     /// 
     pub op: String,
