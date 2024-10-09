@@ -53,47 +53,32 @@ pub struct UpdateOrder {
     ///
     pub id: String,
     ///
-    pub op: String,
-    ///
-    pub path: String,
-    ///
-    pub order: Order,
+    pub data: Vec<UpdateOrderData>,
 }
 
-impl From<(String, UpdateOrderData)> for UpdateOrder {
-    fn from(value: (String, UpdateOrderData)) -> Self {
-        let (id, data) = value;
-        Self {
-            id,
-            op: data.op,
-            path: data.path,
-            order: data.order,
-        }
-    }
-}
 ///
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateOrderData {
     ///
     pub op: String,
     ///
     pub path: String,
     ///
-    pub order: Order,
+    pub value: Value,
 }
 
 ///
 impl UpdateOrder {
     ///
-    pub fn new(id: String, op: String, path: String, order: Order) -> Self {
-        Self { id, op, path, order }
+    pub fn new(id: String, data: Vec<UpdateOrderData>) -> Self {
+        Self { id, data }
     }
 }
 
 impl Endpoint for UpdateOrder {
     type Query = ();
 
-    type Body = Value;
+    type Body = Vec<UpdateOrderData>;
 
     type Response = ();
 
@@ -106,12 +91,7 @@ impl Endpoint for UpdateOrder {
     }
 
     fn body(&self) -> Option<Self::Body> {
-        let body = json!({
-            "op": self.op,
-            "path": self.path,
-            "value": self.order.clone(),
-        });
-        Some(body)
+        Some(self.data.clone())
     }
 }
 
