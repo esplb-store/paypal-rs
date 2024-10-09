@@ -48,21 +48,23 @@ impl Endpoint for CreateOrder {
 }
 
 ///
-#[derive(Debug,Serialize,Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateOrder {
-    /// 
+    ///
+    pub id: String,
+    ///
     pub op: String,
-    /// 
+    ///
     pub path: String,
-    /// 
+    ///
     pub order: Order,
 }
 
-/// 
+///
 impl UpdateOrder {
-    /// 
-    pub fn new( op: String, path: String, order: Order) -> Self {
-        Self {  op, path, order }
+    ///
+    pub fn new(id: String, op: String, path: String, order: Order) -> Self {
+        Self { id, op, path, order }
     }
 }
 
@@ -74,7 +76,7 @@ impl Endpoint for UpdateOrder {
     type Response = ();
 
     fn relative_path(&self) -> Cow<str> {
-        Cow::Owned(format!("/v2/checkout/orders/{}", &self.order.id))
+        Cow::Owned(format!("/v2/checkout/orders/{}", &self.id))
     }
 
     fn method(&self) -> reqwest::Method {
