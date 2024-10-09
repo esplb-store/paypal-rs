@@ -258,10 +258,47 @@ pub struct ShippingDetailName {
 #[derive(Debug, Default, Serialize, Deserialize, Clone, Builder)]
 #[builder(setter(strip_option))]
 pub struct ShippingDetail {
+    /// A classification for the method of purchase fulfillment (e.g shipping, in-store pickup, etc). Either type or options may be present, but not both.
+    #[serde(rename = "type")]
+    pub type_: Option<ShippingDetailType>,
+    /// An array of shipping options that the payee or merchant offers to the payer to ship or pick up their items.
+    pub options: Option<Vec<ShippingDetailOption>>,
     /// The name of the person to whom to ship the items. Supports only the full_name property.
     pub name: Option<ShippingDetailName>,
     /// The address of the person to whom to ship the items.
     pub address: Option<Address>,
+}
+
+/// The shipping type.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[allow(non_camel_case_types)]
+pub enum ShippingDetailType {
+    /// The payer intends to receive the items at a specified address.
+    SHIPPING,
+    /// DEPRECATED. Please use "PICKUP_FROM_PERSON" instead.
+    PICKUP_IN_PERSON,
+    /// The payer intends to pick up the item(s) from the payee's physical store. Also termed as BOPIS, "Buy Online, Pick-up in Store". Seller protection is provided with this option.
+    PICKUP_IN_STORE,
+    /// The payer intends to pick up the item(s) from the payee in person. Also termed as BOPIP, "Buy Online, Pick-up in Person". Seller protection is not available, since the payer is receiving the item from the payee in person, and can validate the item prior to payment.
+    PICKUP_FROM_PERSON,
+}
+
+/// shipping options that the payee or merchant offers to the payer to ship or pick up their items.
+#[skip_serializing_none]
+#[derive(Debug, Serialize, Deserialize, Clone, Builder)]
+#[builder(setter(strip_option))]
+pub struct ShippingDetailOption {
+    /// A unique ID that identifies a payer-selected shipping option.
+    pub id: String,
+    ///  description that the payer sees, which helps them choose an appropriate shipping option. For example, Free Shipping, USPS Priority Shipping, Expédition prioritaire USPS, or USPS yōuxiān fā huò. Localize this description to the payer's locale.
+    pub label: String,
+    /// If the API request sets selected = true, it represents the shipping option that the payee or merchant expects to be pre-selected for the payer when they first view the shipping.options in the PayPal Checkout experience. As part of the response if a shipping.option contains selected=true, it represents the shipping option that the payer selected during the course of checkout with PayPal. Only one shipping.option can be set to selected=true.
+    pub selected: bool,
+    /// A classification for the method of purchase fulfillment.
+    #[serde(rename = "type")]
+    pub type_: Option<ShippingDetailType>,
+    /// The shipping cost for the selected option.
+    pub amount: Option<Amount>,
 }
 
 /// Represents an item.
