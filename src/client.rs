@@ -210,7 +210,7 @@ impl Client {
     }
 
     /// Executes the given endpoint with the given headers.
-    pub async fn execute_ext<E>(&self, endpoint: &E, headers: HeaderParams) -> Result<E::Response, ResponseError>
+    pub async fn execute_ext<E>(&self, endpoint: &E, headers: HeaderParams) -> Result<Option<E::Response>, ResponseError>
     where
         E: Endpoint,
     {
@@ -237,7 +237,7 @@ impl Client {
             //let mut f = std::fs::File::create("output.txt").unwrap();
             //f.write_all(resp_text.as_bytes()).ok();
             //let response_body: E::Response = serde_json::from_str(&resp_text).unwrap();
-            let response_body = res.json::<E::Response>().await?;
+            let response_body = res.json::<E::Response>().await.ok();
             Ok(response_body)
         } else {
             Err(ResponseError::ApiError(res.json::<PaypalError>().await?))
@@ -247,7 +247,7 @@ impl Client {
     /// Executes the given endpoints with the default headers.
     ///
     /// You must remember to call [Client::get_access_token] first or this may fail due to not being authed.
-    pub async fn execute<E>(&self, endpoint: &E) -> Result<E::Response, ResponseError>
+    pub async fn execute<E>(&self, endpoint: &E) -> Result<Option<E::Response>, ResponseError>
     where
         E: Endpoint,
     {
