@@ -48,10 +48,32 @@ impl Endpoint for CreateOrder {
 }
 
 ///
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug)]
 pub struct UpdateOrder {
     ///
     pub id: String,
+    ///
+    pub op: String,
+    ///
+    pub path: String,
+    ///
+    pub order: Order,
+}
+
+impl From<(String, UpdateOrderData)> for UpdateOrder {
+    fn from(value: (String, UpdateOrderData)) -> Self {
+        let (id, data) = value;
+        Self {
+            id,
+            op: data.op,
+            path: data.path,
+            order: data.order,
+        }
+    }
+}
+///
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UpdateOrderData {
     ///
     pub op: String,
     ///
