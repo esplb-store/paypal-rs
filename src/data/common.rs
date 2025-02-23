@@ -221,6 +221,7 @@ impl FromStr for Currency {
             "CHF" => Ok(Self::CHF),
             "THB" => Ok(Self::THB),
             "USD" => Ok(Self::USD),
+            "TWD" => Ok(Self::TWD),
             cur => Err(InvalidCurrencyError(cur.to_owned())),
         }
     }
