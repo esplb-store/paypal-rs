@@ -197,7 +197,7 @@ impl FromStr for Currency {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "AUD" => Ok(Self::AUD),
+             "AUD" => Ok(Self::AUD),
             "BRL" => Ok(Self::BRL),
             "CAD" => Ok(Self::CAD),
             "CNY" => Ok(Self::CNY),
@@ -211,17 +211,18 @@ impl FromStr for Currency {
             "JPY" => Ok(Self::JPY),
             "MYR" => Ok(Self::MYR),
             "MXN" => Ok(Self::MXN),
+            "TWD" => Ok(Self::TWD),
             "NOK" => Ok(Self::NOK),
             "PHP" => Ok(Self::PHP),
             "PLN" => Ok(Self::PLN),
             "GBP" => Ok(Self::GBP),
             "RUB" => Ok(Self::RUB),
             "SGD" => Ok(Self::SGD),
-            "SEK" => Ok(Self::SGD),
+            "SEK" => Ok(Self::SEK),
             "CHF" => Ok(Self::CHF),
             "THB" => Ok(Self::THB),
             "USD" => Ok(Self::USD),
-            "TWD" => Ok(Self::TWD),
+            "NZD" => Ok(Self::NZD),
             cur => Err(InvalidCurrencyError(cur.to_owned())),
         }
     }
